@@ -1,7 +1,3 @@
-CREATE DATABASE onlyfoods;
-
-CREATE SCHEMA public;
-
 --
 -- PostgreSQL database dump
 --
@@ -830,3 +826,4 @@ ALTER TABLE ONLY public.users
 --
 -- PostgreSQL database dump complete
 --
+

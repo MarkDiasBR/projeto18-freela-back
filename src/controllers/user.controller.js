@@ -1,16 +1,16 @@
-import { db } from '../app.js';
+import db from '../database/connection.js';
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 
 export async function signup(req, res) {
-    const { name, email, password, confirmPassword } = req.body;
+    const { fullname, name, email, password, roleId } = req.body;
     const hash = bcrypt.hashSync(password, 10);
 
     try {
         await db.query(`
-            INSERT INTO public.users (name, email, password) 
-            VALUES ($1, $2, $3)
-        `, [name, email, hash]);
+            INSERT INTO public.users (fullname, name, email, password, roleId) 
+            VALUES ($1, $2, $3, $4, $5)
+        `, [fullname, name, email, hash, roleId]);
 
         return res.status(201).send('✅ User created SUCESSFULLY!');
     } catch (err) {
