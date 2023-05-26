@@ -1,10 +1,10 @@
 CREATE TABLE "public"."posts" (
-	"id" serial NOT NULL,
-	"userId" integer NOT NULL,
+	"id" SERIAL NOT NULL,
+	"userId" INTEGER NOT NULL,
 	"description" TEXT NOT NULL,
-	"edited" BOOLEAN NOT NULL,
-	"createdAt" TIMESTAMP NOT NULL,
-	"editedAt" TIMESTAMP NOT NULL,
+	"edited" BOOLEAN NOT NULL DEFAULT FALSE,
+	"createdAt" TIMESTAMP NOT NULL DEFAULT NOW(),
+	"editedAt" TIMESTAMP,
 	CONSTRAINT "posts_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -13,14 +13,14 @@ CREATE TABLE "public"."posts" (
 
 
 CREATE TABLE "public"."users" (
-	"id" serial NOT NULL,
+	"id" SERIAL NOT NULL,
 	"fullname" TEXT NOT NULL,
 	"name" TEXT NOT NULL UNIQUE,
 	"password" TEXT NOT NULL,
 	"email" TEXT NOT NULL UNIQUE,
-	"roleId" integer NOT NULL,
-	"avatarId" integer NOT NULL,
-	"createdAt" TIMESTAMP NOT NULL,
+	"roleId" INTEGER NOT NULL,
+	"avatarId" INTEGER NOT NULL,
+	"createdAt" TIMESTAMP NOT NULL DEFAULT NOW(),
 	CONSTRAINT "users_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -29,11 +29,11 @@ CREATE TABLE "public"."users" (
 
 
 CREATE TABLE "public"."images" (
-	"id" serial NOT NULL,
-	"userId" integer NOT NULL,
+	"id" SERIAL NOT NULL,
+	"userId" INTEGER NOT NULL,
 	"url" TEXT NOT NULL,
-	"imgTypeId" integer NOT NULL,
-	"createdAt" TIMESTAMP NOT NULL,
+	"imgTypeId" INTEGER NOT NULL,
+	"createdAt" TIMESTAMP NOT NULL DEFAULT NOW(),
 	CONSTRAINT "images_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -42,7 +42,7 @@ CREATE TABLE "public"."images" (
 
 
 CREATE TABLE "public"."roles" (
-	"id" serial NOT NULL,
+	"id" SERIAL NOT NULL,
 	"name" TEXT NOT NULL,
 	CONSTRAINT "roles_pk" PRIMARY KEY ("id")
 ) WITH (
@@ -52,7 +52,7 @@ CREATE TABLE "public"."roles" (
 
 
 CREATE TABLE "public"."imgType" (
-	"id" serial NOT NULL,
+	"id" SERIAL NOT NULL,
 	"name" TEXT NOT NULL,
 	CONSTRAINT "imgType_pk" PRIMARY KEY ("id")
 ) WITH (
@@ -62,9 +62,9 @@ CREATE TABLE "public"."imgType" (
 
 
 CREATE TABLE "public"."usersRole" (
-	"id" serial NOT NULL,
-	"userId" integer NOT NULL,
-	"roleId" integer NOT NULL,
+	"id" SERIAL NOT NULL,
+	"userId" INTEGER NOT NULL,
+	"roleId" INTEGER NOT NULL,
 	CONSTRAINT "usersRole_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -73,10 +73,10 @@ CREATE TABLE "public"."usersRole" (
 
 
 CREATE TABLE "public"."sessions" (
-	"id" serial NOT NULL,
-	"userId" integer NOT NULL,
+	"id" SERIAL NOT NULL,
+	"userId" INTEGER NOT NULL,
 	"token" TEXT NOT NULL,
-	"createdAt" TIMESTAMP NOT NULL,
+	"createdAt" TIMESTAMP NOT NULL DEFAULT NOW(),
 	CONSTRAINT "sessions_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -85,9 +85,9 @@ CREATE TABLE "public"."sessions" (
 
 
 CREATE TABLE "public"."postLikes" (
-	"id" serial NOT NULL,
-	"postId" integer NOT NULL,
-	"userId" integer NOT NULL,
+	"id" SERIAL NOT NULL,
+	"postId" INTEGER NOT NULL,
+	"userId" INTEGER NOT NULL,
 	CONSTRAINT "postLikes_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -96,9 +96,9 @@ CREATE TABLE "public"."postLikes" (
 
 
 CREATE TABLE "public"."userFollowers" (
-	"id" serial NOT NULL,
-	"userId" integer NOT NULL,
-	"followerId" integer NOT NULL,
+	"id" SERIAL NOT NULL,
+	"userId" INTEGER NOT NULL,
+	"followerId" INTEGER NOT NULL,
 	CONSTRAINT "userFollowers_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -107,13 +107,13 @@ CREATE TABLE "public"."userFollowers" (
 
 
 CREATE TABLE "public"."comments" (
-	"id" serial NOT NULL,
-	"postId" integer NOT NULL,
-	"userId" integer NOT NULL,
+	"id" SERIAL NOT NULL,
+	"postId" INTEGER NOT NULL,
+	"userId" INTEGER NOT NULL,
 	"content" TEXT NOT NULL,
-	"edited" BOOLEAN NOT NULL,
-	"createdAt" TIMESTAMP NOT NULL,
-	"editedAt" TIMESTAMP NOT NULL,
+	"edited" BOOLEAN NOT NULL DEFAULT FALSE,
+	"createdAt" TIMESTAMP NOT NULL DEFAULT NOW(),
+	"editedAt" TIMESTAMP,
 	CONSTRAINT "comments_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -122,9 +122,9 @@ CREATE TABLE "public"."comments" (
 
 
 CREATE TABLE "public"."commentLikes" (
-	"id" serial NOT NULL,
-	"userId" integer NOT NULL,
-	"commentId" integer NOT NULL,
+	"id" SERIAL NOT NULL,
+	"userId" INTEGER NOT NULL,
+	"commentId" INTEGER NOT NULL,
 	CONSTRAINT "commentLikes_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -157,3 +157,10 @@ ALTER TABLE "comments" ADD CONSTRAINT "comments_fk1" FOREIGN KEY ("userId") REFE
 
 ALTER TABLE "commentLikes" ADD CONSTRAINT "commentLikes_fk0" FOREIGN KEY ("userId") REFERENCES "users"("id");
 ALTER TABLE "commentLikes" ADD CONSTRAINT "commentLikes_fk1" FOREIGN KEY ("commentId") REFERENCES "comments"("id");
+
+INSERT INTO "roles" ("name") VALUES ("admin");
+INSERT INTO "roles" ("name") VALUES ("user");
+
+INSERT INTO "imgType" ("name") VALUES ("avatar");
+INSERT INTO "imgType" ("name") VALUES ("avatarSmall");
+INSERT INTO "imgType" ("name") VALUES ("post");
