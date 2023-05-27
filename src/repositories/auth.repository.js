@@ -79,3 +79,31 @@ export async function getUserRepository(userId) {
         throw err;
     }    
 }
+
+export async function deletePostLikeRepository(postId, userId) {
+    try {
+        return (
+            db.query(`
+                DELETE
+                FROM "postLikes"
+                WHERE "postId"=$1 AND "userId"=$2;
+            `, [postId, userId])
+        )
+    } catch (err) {
+        throw err;
+    }    
+}
+
+export async function postPostLikeRepository(postId, userId) {
+    try {
+        return (
+            db.query(`
+                INSERT 
+                INTO "postLikes" ("postId", "userId")
+                VALUES ($1, $2);
+            `, [postId, userId])
+        )
+    } catch (err) {
+        throw err;
+    }    
+}
