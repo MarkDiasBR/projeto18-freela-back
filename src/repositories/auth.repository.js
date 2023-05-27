@@ -207,3 +207,19 @@ export async function getAllFollowingRepository(userId) {
         throw err;
     }    
 }
+
+export async function searchUserRepository(searchTerm) {
+    try {
+        return (
+            await db.query(`
+                SELECT *
+                FROM "users" 
+                WHERE "name" LIKE $1 OR "fullname" LIKE $1
+                ORDER BY "name" ASC
+                LIMIT 10 ;
+            `, [`%${searchTerm}%`])
+        )
+    } catch (err) {
+        throw err;
+    }    
+}
