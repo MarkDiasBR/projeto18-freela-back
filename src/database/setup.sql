@@ -2,10 +2,10 @@ CREATE TABLE "public"."posts" (
 	"id" SERIAL NOT NULL,
 	"userId" INTEGER NOT NULL,
 	"imageId" INTEGER NOT NULL,
-	"description" TEXT NOT NULL,
+	"description" TEXT NOT NULL DEFAULT '',
 	"edited" BOOLEAN NOT NULL DEFAULT FALSE,
 	"createdAt" TIMESTAMP NOT NULL DEFAULT NOW(),
-	"editedAt" TIMESTAMP NOT NULL,
+	"editedAt" TIMESTAMP,
 	CONSTRAINT "posts_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
