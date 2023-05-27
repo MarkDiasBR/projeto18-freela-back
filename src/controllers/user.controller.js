@@ -8,7 +8,7 @@ export async function signup(req, res) {
 
     try {
         await db.query(`
-            INSERT INTO public.users (fullname, name, email, password, roleId) 
+            INSERT INTO public.users (fullname, name, email, password, "roleId") 
             VALUES ($1, $2, $3, $4, $5)
         `, [fullname, name, email, hash, roleId]);
 
