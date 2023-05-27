@@ -1,4 +1,4 @@
-import { createImageRepository, createPostRepository } from '../repositories/user.repository.js';
+import { createImageRepository, createPostRepository } from '../repositories/auth.repository.js';
 
 export async function createImage(req, res) {
     const { url } = req.body;

@@ -1,32 +1,39 @@
 import db from '../database/connection.js';
 
-export async function createImageRepository(url) {
-	return (
-        db.query(`
-            INSERT 
-            INTO "public"."images" ("url")
-            VALUES ($1)
-            RETURNING "id"; 
-        `, [url])
-    );
-}
-
-export async function createPostRepository(userId, imageId, description) {
-    if (description) {
+export async function postUserRepository(fullname, name, email, hash, bio) {
+    if (bio) {
         return (
-            db.query(`
-                INSERT 
-                INTO "public"."posts" ("userId", "imageId", "description")
-                VALUES ($1, $2, $3); 
-            `, [userId, imageId, description])
+            await db.query(`
+                INSERT INTO public.users (fullname, name, email, password, bio) 
+                VALUES ($1, $2, $3, $4, $5)
+            `, [fullname, name, email, hash, bio])
         )
     } else {
         return (
-            db.query(`
-                INSERT 
-                INTO "public"."posts" ("userId", "imageId")
-                VALUES ($1, $2); 
-            `, [userId, imageId])
+            await db.query(`
+                INSERT INTO public.users (fullname, name, email, password) 
+                VALUES ($1, $2, $3, $4)
+            `, [fullname, name, email, hash])
         )
     }
+}
+
+export async function deleteSessionRepository(id) {
+    return (
+        await db.query(`
+            DELETE
+            FROM public.sessions
+            WHERE "userId"=$1;
+        `, [id])
+    )
+}
+
+export async function postSessionRepository(id, token) {
+    return (
+        db.query(`
+            INSERT
+            INTO public.sessions ("userId", "token")
+            VALUES ($1, $2);
+        `, [id, token])
+    )
 }

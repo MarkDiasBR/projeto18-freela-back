@@ -15,6 +15,7 @@ CREATE TABLE "public"."users" (
 	"id" SERIAL NOT NULL,
 	"fullname" TEXT NOT NULL,
 	"name" TEXT NOT NULL UNIQUE,
+	"bio" VARCHAR(200),
 	"password" TEXT NOT NULL,
 	"email" TEXT NOT NULL UNIQUE,
 	"roleId" INTEGER NOT NULL DEFAULT 2,
