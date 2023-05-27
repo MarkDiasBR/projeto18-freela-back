@@ -49,30 +49,34 @@ export async function getUserRepository(userId) {
                     users.fullname,
                     users.name,
                     users.bio,
-                    json_agg(json_build_object(
-                        'imageUrl', post_images.url,
-                        'createdAt', posts."createdAt",
-                        'description', posts.description,
-                        'likes', (
-                            SELECT json_agg(json_build_object(
-                                'userId', "postLikes"."userId"
-                            ))
-                            FROM "postLikes"
-                            WHERE posts.id = "postLikes"."postId"
-                        )
-                    ) ORDER BY posts."createdAt" DESC) AS posts
+                    CASE
+                        WHEN COUNT(posts.id) = 0 THEN '[]'::json
+                        ELSE json_agg(json_build_object(
+                            'imageUrl', post_images.url,
+                            'createdAt', posts."createdAt",
+                            'description', posts.description,
+                            'likes', (
+                                SELECT json_agg(json_build_object(
+                                    'userId', "postLikes"."userId"
+                                ))
+                                FROM "postLikes"
+                                WHERE posts.id = "postLikes"."postId"
+                            )
+                        ) ORDER BY posts."createdAt" DESC)
+                    END AS posts
                 FROM
                     users
                     JOIN images ON users."avatarId" = images.id
-                    JOIN posts ON users.id = posts."userId"
+                    LEFT JOIN posts ON users.id = posts."userId"
                     LEFT JOIN images AS post_images ON posts."imageId" = post_images.id
-                WHERE "userId" = $1
+                WHERE
+                    users.id = $1
                 GROUP BY
                     users.id,
                     images.url,
                     users.fullname,
                     users.name,
-                    users.bio; 
+                    users.bio;
             `, [userId])
         )
     } catch (err) {
@@ -218,6 +222,51 @@ export async function searchUserRepository(searchTerm) {
                 ORDER BY "name" ASC
                 LIMIT 10 ;
             `, [`%${searchTerm}%`])
+        )
+    } catch (err) {
+        throw err;
+    }    
+}
+
+export async function getUserByIdRepository(userId) {
+    try {
+        return ( 
+            await db.query(`
+                SELECT
+                    users.id AS "userId",
+                    images.url AS "imageUrl",
+                    users.fullname,
+                    users.name,
+                    users.bio,
+                    CASE
+                        WHEN COUNT(posts.id) = 0 THEN '[]'::json
+                        ELSE json_agg(json_build_object(
+                            'imageUrl', post_images.url,
+                            'createdAt', posts."createdAt",
+                            'description', posts.description,
+                            'likes', (
+                                SELECT json_agg(json_build_object(
+                                    'userId', "postLikes"."userId"
+                                ))
+                                FROM "postLikes"
+                                WHERE posts.id = "postLikes"."postId"
+                            )
+                        ) ORDER BY posts."createdAt" DESC)
+                    END AS posts
+                FROM
+                    users
+                    JOIN images ON users."avatarId" = images.id
+                    LEFT JOIN posts ON users.id = posts."userId"
+                    LEFT JOIN images AS post_images ON posts."imageId" = post_images.id
+                WHERE
+                    users.id = $1
+                GROUP BY
+                    users.id,
+                    images.url,
+                    users.fullname,
+                    users.name,
+                    users.bio;
+            `, [userId])
         )
     } catch (err) {
         throw err;

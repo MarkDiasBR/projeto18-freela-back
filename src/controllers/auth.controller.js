@@ -2,7 +2,7 @@ import { createImageRepository, createPostRepository, getUserRepository,
     getPostLikeRepository, deletePostLikeRepository, postPostLikeRepository,
     getFollowerRepository, deleteFollowerRepository, postFollowerRepository,
     getAllFollowersRepository, getAllFollowingRepository, 
-    searchUserRepository } from '../repositories/auth.repository.js';
+    searchUserRepository, getUserByIdRepository } from '../repositories/auth.repository.js';
 
 export async function createImage(req, res) {
     const { url } = req.body;
@@ -115,5 +115,20 @@ export async function searchUser(req, res) {
         console.log(promise.rows)
     } catch (err) {
         throw err;
+    }
+}
+
+export async function getUserById(req, res) {
+    const { userId: myId } = res.locals.session;
+    const { userId } = req.params;
+
+    if (myId === userId) return res.redirect('/users/me');
+
+    try {
+        const promise = await getUserByIdRepository(userId);
+
+        res.status(200).send(promise.rows);
+    } catch (err) {
+        res.status(500).send(`🚫 Unexpected server error!\n\n${err.message}`);
     }
 }

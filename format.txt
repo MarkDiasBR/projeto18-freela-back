@@ -75,3 +75,25 @@ FOLLOWERS DATA
         }
     ]
 }
+
+ANOTHER USER DATA
+
+{
+    userId, (users.id)
+    imageUrl, (images.id)
+	fullname, (users.fullname)
+	name, (users.name)
+	bio, (users.bio)
+	posts: [
+		{
+			imageUrl: (images.url),
+			createdAt: (posts.createdAt),
+			description: (posts.description),
+            likes: [
+                {
+                    userId (postLikes.userId)
+                }
+            ]		
+		}
+	]
+}
