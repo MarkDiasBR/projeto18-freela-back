@@ -10,4 +10,5 @@ const userRouter = Router();
 userRouter.post('/signup', schemaValidation(signupSchema), signupConflictValidation, signup);
 userRouter.post('/signin', schemaValidation(signinSchema), signinValidation, signin);
 
+
 export default userRouter;

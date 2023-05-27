@@ -1,4 +1,3 @@
-import db from '../database/connection.js';
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import { postUserRepository, deleteSessionRepository, postSessionRepository } from '../repositories/user.repository.js';

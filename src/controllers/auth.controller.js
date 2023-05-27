@@ -1,4 +1,4 @@
-import { createImageRepository, createPostRepository } from '../repositories/auth.repository.js';
+import { createImageRepository, createPostRepository, getUserRepository } from '../repositories/auth.repository.js';
 
 export async function createImage(req, res) {
     const { url } = req.body;
@@ -24,6 +24,18 @@ export async function createPost(req, res) {
         await createPostRepository(userId, imageId, description);
 
         res.status(201).send('OK');
+    } catch (err) {
+        res.status(500).send(`🚫 Unexpected server error!\n\n${err.message}`);
+    }
+}
+
+export async function getUser(req, res) {
+    const userId = res.locals.session.userId;
+
+    try {
+        const promise = await getUserRepository(userId);
+
+        res.status(200).send(promise.rows);
     } catch (err) {
         res.status(500).send(`🚫 Unexpected server error!\n\n${err.message}`);
     }

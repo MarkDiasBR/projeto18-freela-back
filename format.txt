@@ -1,0 +1,63 @@
+USER DATA
+
+req.body: {
+    userId
+}
+
+res.body: {
+    userId, (users.id)
+    imageUrl, (images.id)
+	fullname, (users.fullname)
+	name, (users.name)
+	bio, (users.bio)
+	posts: [
+		{
+			imageUrl: (images.url),
+			likes_count: COUNT,
+			createdAt: (posts.createdAt),
+			description: (posts.description),
+            likes: [
+                {
+                    userId (postLikes.userId)
+                }
+            ]
+			comments : [
+				{
+					comment, (comments.content)
+					user, (user.name)
+					edited, (comments.edited)
+					editedAt, (comments.editedAt)
+					createdAt, (coments.createdAt)
+                    commentLikes: [
+                        {
+                            userId (users.id)
+                        }
+                    ]
+				}
+			]		
+		}
+	]
+}
+
+
+versão mais light:
+
+res.body: {
+    userId, (users.id)
+    imageUrl, (images.id)
+	fullname, (users.fullname)
+	name, (users.name)
+	bio, (users.bio)
+	posts: [
+		{
+			imageUrl: (images.url),
+			createdAt: (posts.createdAt),
+			description: (posts.description),
+            likes: [
+                {
+                    userId (postLikes.userId)
+                }
+            ]		
+		}
+	]
+}

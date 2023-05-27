@@ -17,7 +17,7 @@ async function databaseConnection() {
 
     try {
         await db.connect();
-        console.log(chalk.black.bgGreen('\n [🐘 PostgreSQL] DataBase connected SUCCESSFULLY! '), '🗄️📨✨')
+        console.log(chalk.black.bgGreen('\n [🐘 PostgreSQL] Database connected SUCCESSFULLY! '), '🗄️📨✨')
         console.log(chalk.white(' Database'), chalk.underline.italic.blue(name),chalk.white('connected on PORT:'), 
             chalk.underline.italic.blue(port));
     } catch (err) {
