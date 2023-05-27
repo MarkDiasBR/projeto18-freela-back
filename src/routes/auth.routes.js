@@ -1,12 +1,13 @@
-// import { Router } from 'express'
-// import { authValidation } from '../middlewares/auth.middleware.js';
-// import { schemaValidation } from '../middlewares/schemaValidation.middleware.js';
-// import { urlSchema } from '../schemas/auth.schemas.js';
-// import { shortenUrl, deleteLink, getUser, getUserData, getUserName } from '../controllers/auth.controller.js';
+import { Router } from 'express'
+import { authValidation } from '../middlewares/auth.middleware.js';
+import { schemaValidation } from '../middlewares/schemaValidation.middleware.js';
+import { imageSchema } from '../schemas/auth.schemas.js';
+import { createImage } from '../controllers/auth.controller.js';
 
-// const authRouter = Router();
+const authRouter = Router();
 
-// authRouter.use(authValidation);
-// authRouter.post('/urls/shorten', schemaValidation(urlSchema), shortenUrl);
+authRouter.use(authValidation);
+authRouter.post('/images', schemaValidation(imageSchema), createImage);
+authRouter.post('');
 
-// export default authRouter;
+export default authRouter;

@@ -23,6 +23,6 @@ export async function authValidation(req, res, next) {
     } catch (err) {
         res.status(500).send(`🚫 Unexpected server error!\n\n${err.message}`);
     }
-    
+
     next();
 }

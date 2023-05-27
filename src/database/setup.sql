@@ -1,6 +1,7 @@
 CREATE TABLE "public"."posts" (
 	"id" SERIAL NOT NULL,
 	"userId" INTEGER NOT NULL,
+	"imageId" INTEGER NOT NULL,
 	"description" TEXT NOT NULL,
 	"edited" BOOLEAN NOT NULL DEFAULT FALSE,
 	"createdAt" TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -130,6 +131,7 @@ CREATE TABLE "public"."commentLikes" (
 
 
 ALTER TABLE "posts" ADD CONSTRAINT "posts_fk0" FOREIGN KEY ("userId") REFERENCES "users"("id");
+ALTER TABLE "posts" ADD CONSTRAINT "posts_fk1" FOREIGN KEY ("imageId") REFERENCES "images"("id");
 
 ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("avatarId") REFERENCES "images"("id");
 
@@ -164,13 +166,13 @@ INSERT INTO "public"."roles" VALUES (1, 'admin');
 
 INSERT INTO "public"."roles" VALUES (2, 'user');
 
-
-INSERT INTO "public"."users" ("id", "fullname", "name", "password", "email", "roleId") 
-VALUES (1, 'admin', 'admin', 'mark1324', 'markdiasbr@gmail.com', 1);
-
-
 INSERT INTO "public"."images" ("id", "url", "imgTypeId") 
 VALUES (1, 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', 1);
 
 INSERT INTO "public"."images" ("id", "url", "imgTypeId") 
 VALUES (2, 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', 2);
+
+INSERT INTO "public"."users" ("id", "fullname", "name", "password", "email", "roleId") 
+VALUES (1, 'admin', 'admin', 'mark1324', 'markdiasbr@gmail.com', 1);
+
+
