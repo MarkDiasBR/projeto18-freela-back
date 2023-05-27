@@ -27,6 +27,7 @@ export default async function signinValidation(req, res, next) {
     delete user.password;
     delete user.name;
     res.locals.user = user;
+    console.log(user)
 
     next();
 }

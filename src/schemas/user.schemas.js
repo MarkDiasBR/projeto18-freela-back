@@ -7,8 +7,7 @@ export const signupSchema = joi.object({
     password: joi.string().min(3).required(),
     confirmPassword: joi.valid(joi.ref('password')).required().messages({
         'any.only': "\"confirmPassword\" must match \"password\""
-    }),
-    roleId: joi.valid(2).required()
+    })
 });
 
 export const signinSchema = joi.object({

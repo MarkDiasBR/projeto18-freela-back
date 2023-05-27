@@ -10,8 +10,6 @@ CREATE TABLE "public"."posts" (
   OIDS=FALSE
 );
 
-
-
 CREATE TABLE "public"."users" (
 	"id" SERIAL NOT NULL,
 	"fullname" TEXT NOT NULL,
