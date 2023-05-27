@@ -185,3 +185,25 @@ export async function getAllFollowersRepository(userId) {
         throw err;
     }    
 }
+
+export async function getAllFollowingRepository(userId) {
+    try {
+        return (
+            await db.query(`
+                SELECT json_agg(json_build_object(
+                    'userId', users.id,
+                    'name', users.name,
+                    'fullname', users.fullname,
+                    'bio', users.bio,
+                    'avatarUrl', images.url
+                ) ORDER BY name ASC) AS following
+                FROM "userFollowers"
+                JOIN users ON "userFollowers"."followerId" = users.id
+                JOIN images ON users."avatarId" = images.id
+                WHERE "userId" = $1;
+            `, [userId])
+        )
+    } catch (err) {
+        throw err;
+    }    
+}

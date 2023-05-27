@@ -1,7 +1,7 @@
 import { createImageRepository, createPostRepository, getUserRepository, 
     getPostLikeRepository, deletePostLikeRepository, postPostLikeRepository,
     getFollowerRepository, deleteFollowerRepository, postFollowerRepository,
-    getAllFollowersRepository } from '../repositories/auth.repository.js';
+    getAllFollowersRepository, getAllFollowingRepository } from '../repositories/auth.repository.js';
 
 export async function createImage(req, res) {
     const { url } = req.body;
@@ -88,7 +88,19 @@ export async function getFollowers(req, res) {
     try {
         const promise = await getAllFollowersRepository(userId);
 
-        res.status(200).send(promise.rows);
+        res.status(200).send(promise.rows[0]);
+    } catch (err) {
+        res.status(500).send(`🚫 Unexpected server error!\n\n${err.message}`);
+    }
+}
+
+export async function getFollowing(req, res) {
+    const { userId } = res.locals.session;
+
+    try {
+        const promise = await getAllFollowingRepository(userId);
+        console.log(promise)
+        res.status(200).send(promise.rows[0]);
     } catch (err) {
         res.status(500).send(`🚫 Unexpected server error!\n\n${err.message}`);
     }
