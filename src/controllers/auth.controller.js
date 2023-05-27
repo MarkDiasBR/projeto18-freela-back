@@ -1,4 +1,7 @@
-import { createImageRepository, createPostRepository, getUserRepository, deletePostLikeRepository, postPostLikeRepository } from '../repositories/auth.repository.js';
+import { createImageRepository, createPostRepository, getUserRepository, 
+    getPostLikeRepository, deletePostLikeRepository, postPostLikeRepository,
+    getFollowerRepository, deleteFollowerRepository, postFollowerRepository,
+    getAllFollowersRepository } from '../repositories/auth.repository.js';
 
 export async function createImage(req, res) {
     const { url } = req.body;
@@ -46,13 +49,46 @@ export async function putPostLike(req, res) {
     const { userId } = res.locals.session;
 
     try {
-        const promise = await deletePostLikeRepository(postId, userId);
+        const promise = await getPostLikeRepository(postId, userId);
 
-        if (promise.rowCount === 0) {
+        if (promise.rowCount === 1) {
+            await deletePostLikeRepository(postId, userId);
+        } else {
             await postPostLikeRepository(postId, userId);
         }
 
         res.sendStatus(200);
+    } catch (err) {
+        res.status(500).send(`🚫 Unexpected server error!\n\n${err.message}`);
+    }
+}
+
+export async function putFollower(req, res) {
+    const { userId: followerId } = res.locals.session;
+    const { userId } = req.params;
+
+    try {
+        const promise = await getFollowerRepository(followerId, userId);
+
+        if (promise.rowCount === 1) {
+            await deleteFollowerRepository(followerId, userId);
+        } else {
+            await postFollowerRepository(followerId, userId);
+        }
+
+        res.sendStatus(200);       
+    } catch (err) {
+        throw err;
+    }
+}
+
+export async function getFollowers(req, res) {
+    const { userId } = res.locals.session;
+
+    try {
+        const promise = await getAllFollowersRepository(userId);
+
+        res.status(200).send(promise.rows);
     } catch (err) {
         res.status(500).send(`🚫 Unexpected server error!\n\n${err.message}`);
     }
